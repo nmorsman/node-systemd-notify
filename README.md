@@ -1,35 +1,68 @@
 systemd-notify
 ==============
 
-Notify `systemd` about start-up completion and other daemon status changes.
+*Notify `systemd` about start-up completion and other daemon status changes.*
 
 
-### Installation
+## Installation
 
 `npm install systemd-notify`
 
 
-### Usage
+## Usage
 
-__notify(opts, [callback]);__
+`systemd-notify` supports both callbacks and promises.
+
+__notify(opts = {}, [callback]);__
 
 ```js
-var notify = require('systemd-notify');
+const notify = require('systemd-notify');
 
-notify({
+const opts = {
     ready: true,
     status: 'Ready to go',
-    pid: 1337,
-    booted: true
-}, function(err) {
-    // Done
+    pid: 1337
+};
+
+
+/**
+ * Callback
+ */
+
+notify(opts, (err) => {
+    /* Done */
 });
+
+
+/**
+ * Promise
+ */
+
+notify(opts).then(() => {
+    /* Done */
+}).catch((err) => {
+    /* Err */
+});
+
+
+/**
+ * Async-await
+ */
+
+async function() {
+    try {
+        await notify(opts);
+    }
+    catch (e) {
+        /* Err */
+    }
+}
 ```
 
-For more information about the options, consult the man-page:
+For more information about the options, consult with the man-page:
 [https://www.freedesktop.org/software/systemd/man/systemd-notify.html](https://www.freedesktop.org/software/systemd/man/systemd-notify.html)
 
 
-### License
+## License
 
 [MIT](LICENSE)
