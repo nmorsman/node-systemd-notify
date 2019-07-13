@@ -1,5 +1,4 @@
-systemd-notify
-==============
+# systemd-notify [![CircleCI](https://circleci.com/gh/nmorsman/node-systemd-notify.svg?style=svg)](https://circleci.com/gh/nmorsman/node-systemd-notify)
 
 *Notify `systemd` about start-up completion and other daemon status changes.*
 
