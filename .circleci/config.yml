@@ -4,17 +4,15 @@ version: 2.1
 commands:
   test:
     steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y systemd netcat-openbsd
+      - run: sudo apt-get update && sudo apt-get install -y systemd netcat-openbsd
       - run: sudo mkdir -p /var/run/systemd && sudo chown circleci:circleci /var/run/systemd
-      - run: while true; do nc -lvuU /var/run/systemd/notify >/dev/null 2>&1; done&
       - run: node --version
       - run: npm --version
       - run: yarn --version
       - run: systemd-notify --version
       - checkout
       - run: yarn
-      - run: yarn run test
+      - run: bash -c 'while true; do nc -lvuU /var/run/systemd/notify >/dev/null 2>&1; done&' && yarn run test
 
 jobs:
   node-v8: { docker: [{ image: circleci/node:8 }], steps: [ test ]}
