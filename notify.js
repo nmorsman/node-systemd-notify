@@ -1,62 +1,73 @@
-var spawn = require('child_process').spawn;
+/**
+ * systemd-notify
+ */
 
-function generateArguments(opts) {
-    var result = [];
+const { spawn } = require('child_process');
 
-    if ((typeof opts.ready !== 'undefined') && (opts.ready === true)) {
+
+function generateArgs(opts) {
+    const result = [];
+
+    if (('ready' in opts) && (opts.ready === true)) {
         result.push('--ready');
     }
 
-    if (typeof opts.pid !== 'undefined') {
-        result.push('--pid=' + opts.pid);
+    if ('pid' in opts) {
+        result.push(`--pid=${opts.pid}`);
+    }
+    else if (('ready' in opts) || ('status' in opts)) {
+        /**
+         * Always send PID to avoid possible race condition
+         * https://www.pluralsight.com/tech-blog/using-systemd-notify-with-nodejs/
+         */
+
+        result.push(`--pid=${process.pid}`);
     }
 
-    if (typeof opts.status !== 'undefined') {
-        result.push('--status=' + opts.status);
+    if ('status' in opts) {
+        result.push(`--status=${opts.status}`);
     }
 
-    if ((typeof opts.booted !== 'undefined') && (opts.booted === true)) {
+    if (('booted' in opts) && (opts.booted === true)) {
         result.push('--booted');
     }
 
     return result;
 }
 
-module.exports = function(opts, callback) {
-    if (typeof opts === 'undefined') {
-        opts = {};
-    }
 
-    var args = generateArguments(opts);
-    var cmdStream = spawn('systemd-notify', args);
-    var stdout = '';
-    var stderr = '';
+module.exports = (opts = {}, callback) => new Promise((resolve, reject) => {
+    const args = generateArgs(opts);
+    const cmd = spawn('systemd-notify', args);
 
-    cmdStream.stdout.on('data', function(d) {
-        stdout += d;
-    });
+    let stdout = '';
+    let stderr = '';
+    let hasCalledBack = false;
 
-    cmdStream.stderr.on('data', function(d) {
-        stderr += d;
-    });
+    cmd.stdout.on('data', (d) => { stdout += d; });
+    cmd.stderr.on('data', (d) => { stderr += d; });
 
-    cmdStream.on('error', function(err) {
-        if (typeof callback === 'function') {
-            callback(err);
+    cmd.on('error', (err) => {
+        if (hasCalledBack) {
+            return null;
         }
+
+        hasCalledBack = true;
+        return (typeof callback === 'function') ? callback(err) : reject(err);
     });
 
-    cmdStream.on('close', function(code) {
+    cmd.on('close', (code) => {
+        if (hasCalledBack) {
+            return null;
+        }
+
+        hasCalledBack = true;
+
         if (code !== 0) {
-            if (typeof callback === 'function') {
-                callback(stderr.trim() || stdout.trim());
-            }
-
-            return;
+            const err = stderr.trim() || stdout.trim();
+            return (typeof callback === 'function') ? callback(err) : reject(err);
         }
 
-        if (typeof callback === 'function') {
-            callback(null);
-        }
+        return (typeof callback === 'function') ? callback(null, cmd) : resolve(cmd);
     });
-};
+});
