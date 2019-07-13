@@ -1,0 +1,25 @@
+---
+version: 2.1
+
+commands:
+  test:
+    steps:
+      - run: node --version
+      - run: npm --version
+      - run: yarn --version
+      - run: systemd-notify --version
+      - checkout
+      - run: yarn
+      - run: yarn run test
+
+jobs:
+  node-v8: { docker: [{ image: circleci/node:8 }], steps: [ test ]}
+  node-v10: { docker: [{ image: circleci/node:10 }], steps: [ test ]}
+  node-v12: { docker: [{ image: circleci/node:12 }], steps: [ test ]}
+
+workflows:
+  test-suite:
+    jobs:
+      - node-v8
+      - node-v10
+      - node-v12
