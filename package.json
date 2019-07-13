@@ -1,25 +1,39 @@
 {
-  "name": "systemd-notify",
-  "description": "Notify systemd about start-up completion and other daemon status changes",
-  "author": "nmorsman",
-  "version": "0.1.0",
-  "main": "notify.js",
-  "homepage": "https://github.com/nmorsman/node-systemd-notify",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nmorsman/node-systemd-notify.git"
-  },
-  "keywords": [
-    "systemd",
-    "notify"
-  ],
-  "bugs": {
-    "url": "https://github.com/nmorsman/node-systemd-notify/issues"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/nmorsman/node-systemd-notify/blob/master/LICENSE"
+    "name": "systemd-notify",
+    "description": "Notify systemd about start-up completion and other daemon status changes",
+    "author": "nmorsman",
+    "version": "0.1.0",
+    "main": "notify.js",
+    "homepage": "https://github.com/nmorsman/node-systemd-notify",
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/nmorsman/node-systemd-notify/blob/master/LICENSE"
+        }
+    ],
+    "dependencies": {},
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "chai-as-promised": "^7.1.1",
+        "eslint": "^6.0.1",
+        "eslint-config-airbnb-base": "^13.2.0",
+        "eslint-plugin-import": "^2.18.0",
+        "mocha": "^6.1.4"
+    },
+    "scripts": {
+        "lint": "eslint .",
+        "mocha": "mocha -t 30000 \"test/setup.js\" \"test/**/*.spec.js\"",
+        "test": "yarn run lint && yarn run mocha"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nmorsman/node-systemd-notify.git"
+    },
+    "keywords": [
+        "systemd",
+        "notify"
+    ],
+    "bugs": {
+        "url": "https://github.com/nmorsman/node-systemd-notify/issues"
     }
-  ]
 }
