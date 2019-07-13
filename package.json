@@ -2,7 +2,7 @@
     "name": "systemd-notify",
     "description": "Notify systemd about start-up completion and other daemon status changes",
     "author": "nmorsman",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "main": "notify.js",
     "homepage": "https://github.com/nmorsman/node-systemd-notify",
     "licenses": [

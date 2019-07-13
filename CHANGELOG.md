@@ -1,4 +1,4 @@
-## v1.0.0
+## v1.0.0 (2019-07-13)
 
 * `added` Tests and CircleCI
 * `breaking` Remove support for Node v4 and v6
