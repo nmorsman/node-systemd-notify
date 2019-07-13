@@ -21,7 +21,7 @@ describe('systemd-notify', () => {
      */
 
     it('should succeed with callback', (done) => {
-        notify({ booted: true }, (err) => {
+        notify({ ready: true }, (err) => {
             assert.isNull(err);
             done();
         });
@@ -40,7 +40,7 @@ describe('systemd-notify', () => {
      */
 
     it('should succeed with promise', async () => {
-        await notify({ booted: true });
+        await notify({ ready: true });
     });
 
     it('should throw with promise', async () => {
@@ -51,13 +51,6 @@ describe('systemd-notify', () => {
     /**
      * Args
      */
-
-    it('should set --booted', async () => {
-        const cmd = await notify({ booted: true });
-        assert.isArray(cmd.spawnargs);
-        assert.include(cmd.spawnargs, 'systemd-notify');
-        assert.include(cmd.spawnargs, '--booted');
-    });
 
     it('should set --ready and process pid', async () => {
         const cmd = await notify({ ready: true });
@@ -76,7 +69,7 @@ describe('systemd-notify', () => {
     it('should set --status', async () => {
         const cmd = await notify({ status: 'I am ready' });
         assert.isArray(cmd.spawnargs);
-        assert.include(cmd.spawnargs, '--status="I am ready"');
+        assert.include(cmd.spawnargs, '--status=I am ready');
         assert.include(cmd.spawnargs, `--pid=${process.pid}`);
     });
 
