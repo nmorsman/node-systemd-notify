@@ -32,6 +32,12 @@ function generateArgs(opts) {
         result.push('--booted');
     }
 
+    if ('variables' in opts) {
+        for (const n in opts.variables) {
+            result.push(`${n}=${opts.variables[n]}`);
+        }
+    }
+
     return result;
 }
 
