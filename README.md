@@ -20,7 +20,10 @@ const notify = require('systemd-notify');
 const opts = {
     ready: true,
     status: 'Ready to go',
-    pid: 1337
+    pid: 1337,
+    variables: {
+        WATCHDOG: 1
+    }
 };
 
 
