@@ -33,9 +33,9 @@ function generateArgs(opts) {
     }
 
     if ('variables' in opts) {
-        for (const n in opts.variables) {
-            result.push(`${n}=${opts.variables[n]}`);
-        }
+        Object.keys(opts.variables).forEach(function(key) {
+            result.push(`${key}=${opts.variables[key]}`);
+        })
     }
 
     return result;

@@ -74,11 +74,11 @@ describe('systemd-notify', () => {
     });
 
     it('should set variables', async () => {
-        const cmd = await notify({ status: 'I am ready', variables: { WATCHDOG: 1} });
+        const cmd = await notify({ status: 'I am ready', variables: { WATCHDOG: 1 } });
         assert.isArray(cmd.spawnargs);
         assert.include(cmd.spawnargs, '--status=I am ready');
         assert.include(cmd.spawnargs, `--pid=${process.pid}`);
-        assert.include(cmd.spawnargs, `WATCHDOG=1`);
+        assert.include(cmd.spawnargs, 'WATCHDOG=1');
     });
 
 
